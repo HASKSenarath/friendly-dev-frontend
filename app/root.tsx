@@ -5,11 +5,13 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import Navbar from "~/components/Navbar";
+import Loader from "~/components/Loader";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -32,6 +34,9 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const navigation = useNavigation();
+  const isLoading = navigation.state !== "idle";
+
   return (
     <html lang="en">
       <head>
@@ -43,6 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <Navbar />
         <main>{children}</main>
+        {isLoading ? <Loader /> : null}
         <ScrollRestoration />
         <Scripts />
       </body>
